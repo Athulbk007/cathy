@@ -1,0 +1,100 @@
+<!-- <!DOCTYPE html>
+<html>
+<head>
+    <title>Cathy Assistant</title>
+</head>
+<body>
+    <h1>Cathy Assistant</h1>
+    <p>{{ response_text }}</p>
+</body>
+</html> -->
+
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Voice Assistant</title>
+</head>
+<body>
+    <h1>Voice Assistant Website</h1>
+    <button id="startListeningButton">Start Listening</button>
+    <p id="output"></p>
+
+    <script>
+        const startListeningButton = document.getElementById('startListeningButton');
+        const output = document.getElementById('output');
+
+        startListeningButton.addEventListener('click', () => {
+            // Request permission to use the microphone
+            navigator.mediaDevices.getUserMedia({ audio: true })
+                .then((stream) => {
+                    // Create a new SpeechRecognition object
+                    const recognition = new window.SpeechRecognition();
+                    recognition.lang = 'en-US';
+                    recognition.interimResults = false;
+
+                    recognition.onresult = (event) => {
+                        const command = event.results[0][0].transcript.toLowerCase();
+                        output.innerHTML = `You said: ${command}`;
+
+                        // Call the function to handle the voice commands
+                        handleVoiceCommand(command);
+                    };
+
+                    recognition.onerror = (event) => {
+                        output.innerHTML = `Error occurred: ${event.error}`;
+                    };
+
+                    recognition.onend = () => {
+                        output.innerHTML = 'Speech recognition stopped.';
+                    };
+
+                    // Start listening
+                    recognition.start();
+                    output.innerHTML = 'Listening...';
+                })
+                .catch((err) => {
+                    output.innerHTML = `Error: ${err.message}`;
+                });
+        });
+
+        function handleVoiceCommand(command) {
+            // Add your logic here to interpret voice commands and perform actions
+            if (command.includes('scroll up')) {
+                window.scrollBy(0, -100); // Scroll up by 100 pixels
+            } else if (command.includes('scroll down')) {
+                window.scrollBy(0, 100); // Scroll down by 100 pixels
+            }
+        }
+
+    // function scrollPage(direction) {
+    //     // Implement the logic to scroll the webpage here
+    //     // You can use the window.scrollTo() method to achieve this
+    //     if (direction === "up") {
+    //         window.scrollBy(0, -200); // Scroll up by 200 pixels
+    //     } else if (direction === "down") {
+    //         window.scrollBy(0, 200); // Scroll down by 200 pixels
+    //     }
+        
+    // }
+    function scrollPage(direction) {
+    // Get the height of the viewport
+    const viewportHeight = Math.max(document.documentElement.clientHeight || 0, window.innerHeight || 0);
+
+    // Calculate the scrolling distance based on a fraction of the viewport height
+    const scrollDistance = Math.floor(viewportHeight * 0.8); // Scroll by 80% of the viewport height
+
+    if (direction === "up") {
+        window.scrollBy(0, -scrollDistance); // Scroll up by the calculated distance
+    } else if (direction === "down") {
+        window.scrollBy(0, scrollDistance); // Scroll down by the calculated distance
+    }
+}
+
+    </script>
+</body>
+</html>
+
+
+
